@@ -83,7 +83,7 @@ public class JettyServer implements IServer {
 		changeClassLoader(webAppContext);
 
 		if (scanInternalSeconds > 0) {
-			// 启动定时检测class文件是否更新
+			// 鍚姩瀹氭椂妫�娴嬬被鏂囦欢鏄惁鏀瑰彉scanner
 			Scanner scanner = new Scanner(PathUtil.getRootClassPath(),
 					scanInternalSeconds) {
 
