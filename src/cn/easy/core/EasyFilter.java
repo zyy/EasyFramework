@@ -11,16 +11,16 @@ import javax.servlet.ServletResponse;
 public class EasyFilter implements Filter {
 
 	public void destroy() {
-		System.out.println("call destroy method");
+		System.out.println("-->call destroy method");
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-		System.out.println("get new request to filter");
+		System.out.println("-->get new request to filter");
 	}
 
 	public void init(FilterConfig config) throws ServletException {
-		System.out.println("call init method");
+		System.out.println("-->call init method");
 	}
 
 }
