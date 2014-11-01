@@ -13,27 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.config;
+package cn.easy.render;
 
-import java.util.Properties;
+public class RenderFactory {
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
-
-	public abstract void configHandlers(Handlers handlers);
-
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
+	public static void setMainRenderFactory(IMainRenderFactory mainRenderFactory) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public void beforeEasyFrameworkStop() {
+	public static void setErrorRenderFactory(
+			IErrorRenderFactory errorRenderFactory) {
+		// TODO Auto-generated method stub
+		
 	}
-
-	private Properties properties;
 
 }

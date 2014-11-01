@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package cn.easy.core;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -22,20 +23,57 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import cn.easy.config.EasyConfig;
+import cn.easy.log.Logger;
 
 public class EasyFilter implements Filter {
+	private EasyConfig easyConfig;
+	private final static EasyFramework easyFramework = EasyFramework
+			.getInstance();
+	private static Logger log;
 
 	public void destroy() {
-		System.out.println("-->call destroy method");
+		System.out.println("-->Call EasyFilter destroy method");
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-		System.out.println("-->get new request to filter");
+		System.out.println("-->EasyFilter get new request to filter");
 	}
 
 	public void init(FilterConfig config) throws ServletException {
-		System.out.println("-->call init method");
+		System.out.println("-->Call EasyFilter init method");
+		createEasyConfig(config.getInitParameter("classConfig"));
+
+		if (easyFramework.init(easyConfig, config.getServletContext()) == false)
+			throw new RuntimeException("EasyFramework init error");
+	}
+
+	private void createEasyConfig(String classConfig) {
+		if (classConfig == null)
+			throw new RuntimeException(
+					"Please set classConfig parameter of EasyFilter in web.xml");
+
+		try {
+			Object tmp = Class.forName(classConfig).newInstance();
+			if (tmp instanceof EasyConfig)
+				easyConfig = (EasyConfig) tmp;
+			else
+				throw new RuntimeException("Can not create instance of class "
+						+ classConfig + "Please check the config in web.xml");
+		} catch (InstantiationException e) {
+			throw new RuntimeException("Can not create instance of class "
+					+ classConfig, e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("Can not create instance of class "
+					+ classConfig, e);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Class not found " + classConfig, e);
+		}
+	}
+
+	public static void initLogger() {
+		log = Logger.getLogger(EasyFilter.class);
 	}
 
 }

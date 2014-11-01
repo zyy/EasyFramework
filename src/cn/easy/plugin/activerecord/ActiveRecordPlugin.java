@@ -13,27 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.config;
+package cn.easy.plugin.activerecord;
 
-import java.util.Properties;
+import cn.easy.plugin.IPlugin;
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
+public class ActiveRecordPlugin implements IPlugin {
 
-	public abstract void configHandlers(Handlers handlers);
-
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
+	public boolean start() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	public void beforeEasyFrameworkStop() {
+	public boolean stop() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	private Properties properties;
+	public Object getDevMode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setDevMode(Object devMode) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

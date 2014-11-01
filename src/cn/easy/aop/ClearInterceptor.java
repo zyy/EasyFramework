@@ -13,27 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.config;
+package cn.easy.aop;
 
-import java.util.Properties;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
-
-	public abstract void configHandlers(Handlers handlers);
-
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
-	}
-
-	public void beforeEasyFrameworkStop() {
-	}
-
-	private Properties properties;
-
+@Inherited
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE, ElementType.METHOD })
+public @interface ClearInterceptor {
+	ClearLayer value() default ClearLayer.UPPER;
 }

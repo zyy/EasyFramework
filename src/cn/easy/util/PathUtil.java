@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 
 public class PathUtil {
 
+	private static String webRootPath;
 	private static String rootClassPath;
 
 	public static String getRootClassPath() {
@@ -34,6 +35,30 @@ public class PathUtil {
 				rootClassPath = new File(path).getAbsolutePath();
 			}
 		return rootClassPath;
+	}
+
+	public static String getWebRootPath() {
+		if (webRootPath == null)
+			webRootPath = detectWebRootPath();;
+		return webRootPath;
+	}
+	
+	public static void setWebRootPath(String webRootPath) {
+		if (webRootPath == null)
+			return ;
+		
+		if (webRootPath.endsWith(File.separator))
+			webRootPath = webRootPath.substring(0, webRootPath.length() - 1);
+		PathUtil.webRootPath = webRootPath;
+	}
+	
+	private static String detectWebRootPath() {
+		try {
+			String path = PathUtil.class.getResource("/").toURI().getPath();
+			return new File(path).getParentFile().getParentFile().getCanonicalPath();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

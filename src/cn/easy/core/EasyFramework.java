@@ -15,17 +15,80 @@
  */
 package cn.easy.core;
 
+import javax.servlet.ServletContext;
+
+import cn.easy.config.Constants;
+import cn.easy.config.EasyConfig;
 import cn.easy.server.IServer;
 import cn.easy.server.ServerFactory;
+import cn.easy.util.PathUtil;
 
 public class EasyFramework {
 	private static IServer server;
+	private static EasyFramework easyFramework = new EasyFramework();
+	private ServletContext servletContext;
+	private String contextPath = "";
+	private Constants constants;
+
+	private EasyFramework() {
+	}
+
+	public static EasyFramework getInstance() {
+		return easyFramework;
+	}
 
 	public static void main(String[] args) {
 		if (args == null || args.length <= 0) {
 			server = ServerFactory.getServer();
 			server.start();
 		}
+	}
+
+	public boolean init(EasyConfig easyConfig, ServletContext servletContext) {
+		this.servletContext = servletContext;
+		this.contextPath = servletContext.getContextPath();
+
+		initPathUtil();
+		
+		Config.configEasyFramework(easyConfig);
+		constants = Config.getConstants();
+		
+		initActionMapping();
+		initHandler();
+		initRender();
+		initOreillyCos();
+		initI18n();
+		initTokenManager();
+		
+		return true;
+	}
+
+	private void initTokenManager() {
+		
+	}
+
+	private void initI18n() {
+		
+	}
+
+	private void initOreillyCos() {
+		
+	}
+
+	private void initRender() {
+		
+	}
+
+	private void initHandler() {
+		
+	}
+
+	private void initActionMapping() {
+		
+	}
+
+	private void initPathUtil() {
+		PathUtil.setWebRootPath(servletContext.getRealPath("/"));
 	}
 
 }

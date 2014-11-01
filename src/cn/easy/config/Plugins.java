@@ -15,25 +15,21 @@
  */
 package cn.easy.config;
 
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.List;
+import cn.easy.plugin.IPlugin;
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
+public final class Plugins {
 
-	public abstract void configHandlers(Handlers handlers);
+	private final List<IPlugin> pluginList = new ArrayList<IPlugin>();
 
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
+	public Plugins add(IPlugin plugin) {
+		if (plugin != null)
+			pluginList.add(plugin);
+		return this;
 	}
 
-	public void beforeEasyFrameworkStop() {
+	public List<IPlugin> getPluginList() {
+		return pluginList;
 	}
-
-	private Properties properties;
-
 }

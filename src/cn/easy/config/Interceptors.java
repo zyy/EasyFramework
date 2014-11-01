@@ -15,25 +15,23 @@
  */
 package cn.easy.config;
 
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
+import cn.easy.aop.Interceptor;
 
-	public abstract void configHandlers(Handlers handlers);
+public final class Interceptors {
+	private List<Interceptor> interceptorList = new ArrayList<Interceptor>();
 
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
+	public Interceptors add(Interceptor interceptor) {
+		if (interceptor != null)
+			interceptorList.add(interceptor);
+		return this;
 	}
 
-	public void beforeEasyFrameworkStop() {
+	public Interceptor[] getInterceptorList() {
+		Interceptor[] interceptors = interceptorList
+				.toArray(new Interceptor[interceptorList.size()]);
+		return interceptors == null ? new Interceptor[0] : interceptors;
 	}
-
-	private Properties properties;
-
 }

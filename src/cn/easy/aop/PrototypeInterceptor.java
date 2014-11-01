@@ -13,27 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.config;
+package cn.easy.aop;
 
-import java.util.Properties;
+import cn.easy.core.ActionInvocation;
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
+public abstract class PrototypeInterceptor implements Interceptor{
 
-	public abstract void configHandlers(Handlers handlers);
-
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
+	public final void intercept(ActionInvocation ai) {
+		try {
+			getClass().newInstance().doIntercept(ai);
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	public void beforeEasyFrameworkStop() {
-	}
-
-	private Properties properties;
-
+	abstract public void doIntercept(ActionInvocation ai);
 }

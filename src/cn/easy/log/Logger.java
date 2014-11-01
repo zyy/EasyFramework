@@ -13,27 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.config;
+package cn.easy.log;
 
-import java.util.Properties;
+public abstract class Logger {
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
-
-	public abstract void configHandlers(Handlers handlers);
-
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
+	public static void init() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public void beforeEasyFrameworkStop() {
+	public static Logger getLogger(Class<?> clazz) {
+		return null;
 	}
 
-	private Properties properties;
+	public void error(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void error(String message, Exception e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void setLoggerFactory(ILoggerFactory loggerFactory) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

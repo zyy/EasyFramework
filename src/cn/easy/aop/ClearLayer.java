@@ -13,27 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.config;
+package cn.easy.aop;
 
-import java.util.Properties;
+public enum ClearLayer {
+	// clear upper layer
+	UPPER,
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
-
-	public abstract void configHandlers(Handlers handlers);
-
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
-	}
-
-	public void beforeEasyFrameworkStop() {
-	}
-
-	private Properties properties;
-
+	// clear all layer
+	ALL
 }

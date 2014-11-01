@@ -13,27 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.config;
+package cn.easy.token;
 
-import java.util.Properties;
+import java.util.List;
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
-
-	public abstract void configHandlers(Handlers handlers);
-
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
-	}
-
-	public void beforeEasyFrameworkStop() {
-	}
-
-	private Properties properties;
-
+/**
+ * ITokenCache.
+ */
+public interface ITokenCache {
+	
+	void put(Token token);
+	
+	void remove(Token token);
+	
+	boolean contains(Token token);
+	
+	List<Token> getAll();
 }

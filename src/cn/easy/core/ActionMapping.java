@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.config;
+package cn.easy.core;
 
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
+import cn.easy.config.Interceptors;
+import cn.easy.config.Routes;
 
-	public abstract void configHandlers(Handlers handlers);
+public final class ActionMapping {
 
-	public abstract void configInterceptors(Interceptors interceptors);
+	private static final String SLASH = "/";
+	private Routes routes;
+	private Interceptors interceptors;
+	
+	private final Map<String, Action> mapping = new HashMap<String, Action>();
 
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
+	public ActionMapping(Routes routes, Interceptors interceptors) {
+		super();
+		this.routes = routes;
+		this.interceptors = interceptors;
 	}
-
-	public void beforeEasyFrameworkStop() {
-	}
-
-	private Properties properties;
-
+	
+	
 }

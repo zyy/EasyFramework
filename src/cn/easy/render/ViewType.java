@@ -13,27 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.config;
 
-import java.util.Properties;
+package cn.easy.render;
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
-
-	public abstract void configHandlers(Handlers handlers);
-
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
-	}
-
-	public void beforeEasyFrameworkStop() {
-	}
-
-	private Properties properties;
-
+/**
+ * View types of jfinal support. 
+ */
+public enum ViewType {
+	JSP,
+	FREE_MARKER,
+	VELOCITY,
+	OTHER;
 }

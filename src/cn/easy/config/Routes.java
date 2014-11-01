@@ -15,25 +15,11 @@
  */
 package cn.easy.config;
 
-import java.util.Properties;
+public abstract class Routes {
+	public abstract void config();
 
-public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
-
-	public abstract void configHandlers(Handlers handlers);
-
-	public abstract void configInterceptors(Interceptors interceptors);
-
-	public abstract void configPlugins(Plugins plugins);
-
-	public abstract void configRoutes(Routes routes);
-
-	public void afterEasyFrameworkStart() {
+	public static void setBaseViewPath(String baseViewPath) {
+		// TODO Auto-generated method stub
+		
 	}
-
-	public void beforeEasyFrameworkStop() {
-	}
-
-	private Properties properties;
-
 }
