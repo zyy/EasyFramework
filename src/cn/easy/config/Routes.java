@@ -15,11 +15,65 @@
  */
 package cn.easy.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import cn.easy.core.Controller;
+import cn.easy.util.StringUtil;
+
 public abstract class Routes {
+
+	private final Map<String, Class<? extends Controller>> map = new HashMap<String, Class<? extends Controller>>();
+	private final Map<String, String> viewPathMap = new HashMap<String, String>();
+	private static String baseViewPath;
+
 	public abstract void config();
 
-	public static void setBaseViewPath(String baseViewPath) {
-		// TODO Auto-generated method stub
+	public Routes add(Routes routes) {
+		if (routes != null) {
+			routes.config();
+			map.putAll(routes.map);
+			viewPathMap.putAll(routes.viewPathMap);
+		}
+		return this;
+	}
+
+	public Routes addRoute(String controllerKey,
+			Class<? extends Controller> controllerClass, String viewPath) {
+		if (StringUtil.isEmpty(controllerKey))
+			throw new IllegalArgumentException(
+					"The controllerKey can not be empty");
+		if (map.containsKey(controllerKey))
+			throw new IllegalArgumentException(
+					"The contorllerKey already exist" + controllerKey);
+		if (!controllerKey.startsWith("/"))
+			controllerKey = "/" + controllerKey;
+		map.put(controllerKey, controllerClass);
+
+		if (StringUtil.isEmpty(viewPath))
+			viewPath = controllerKey;
+		if (!viewPath.startsWith("/"))
+			viewPath = "/" + viewPath;
+		if (!viewPath.endsWith("/"))
+			viewPath = viewPath + "/";
+		if (baseViewPath != null)
+			viewPath = baseViewPath + viewPath;
 		
+		viewPathMap.put(controllerKey, viewPath);
+		return this;
+	}
+
+	public static void setBaseViewPath(String baseViewPath) {
+		if (StringUtil.isEmpty(baseViewPath))
+			throw new IllegalArgumentException(
+					"The baseViewPath can not be empty");
+
+		if (!baseViewPath.startsWith("/"))
+			baseViewPath = "/" + baseViewPath;
+
+		if (baseViewPath.endsWith("/"))
+			baseViewPath = baseViewPath.substring(0, baseViewPath.length() - 1);
+
+		Routes.baseViewPath = baseViewPath;
 	}
 }
