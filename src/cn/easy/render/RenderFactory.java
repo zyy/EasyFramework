@@ -16,7 +16,13 @@
 package cn.easy.render;
 
 public class RenderFactory {
+	
+	private static RenderFactory renderFactory = new RenderFactory();
 
+	public static RenderFactory getInstance() {
+		return renderFactory;
+	}
+	
 	public static void setMainRenderFactory(IMainRenderFactory mainRenderFactory) {
 		// TODO Auto-generated method stub
 		
@@ -26,6 +32,11 @@ public class RenderFactory {
 			IErrorRenderFactory errorRenderFactory) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Render getErrorRender(int errorCode, String errorView) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
