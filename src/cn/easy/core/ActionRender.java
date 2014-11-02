@@ -19,15 +19,20 @@ import cn.easy.render.Render;
 
 public final class ActionRender extends Render{
 
+	private static final long serialVersionUID = 2193051988348206705L;
+	private String actionUrl;
+	
 	@Override
 	public void render() {
-		// TODO Auto-generated method stub
-		
+	}
+
+	public ActionRender(String actionUrl) {
+		super();
+		this.actionUrl = actionUrl.trim();
 	}
 
 	public String getActionUrl() {
-		// TODO Auto-generated method stub
-		return null;
+		return actionUrl;
 	}
 
 }

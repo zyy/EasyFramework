@@ -15,14 +15,10 @@
  */
 package cn.easy.core;
 
-import java.io.File;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +27,7 @@ import javax.servlet.http.HttpSession;
 
 import cn.easy.render.Render;
 
-public class Controller {
+public abstract class Controller {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	
