@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import cn.easy.render.Render;
+
 public class Controller {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
@@ -600,6 +602,11 @@ public class Controller {
 	 */
 	public Long getParaToLong() {
 		return toLong(getPara(), null);
+	}
+
+	public Render getRender() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

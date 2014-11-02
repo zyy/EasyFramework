@@ -17,6 +17,21 @@ package cn.easy.render;
 
 import java.io.Serializable;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 public abstract class Render implements Serializable {
+
+	public Render setContext(HttpServletRequest request,
+			HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		return this;
+	}
+	
+	public final Render setContext(HttpServletRequest request, HttpServletResponse response, String viewPath) {
+		return this;
+	}
+
+	public abstract void render();
 	
 }

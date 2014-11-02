@@ -34,6 +34,11 @@ public final class ActionMapping {
 		this.routes = routes;
 		this.interceptors = interceptors;
 	}
+
+	public Action getAction(String target, String[] urlPra) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

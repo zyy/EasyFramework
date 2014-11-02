@@ -34,6 +34,16 @@ public class RenderFactory {
 		
 	}
 
+	public Render getErrorRender(int errorCode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getDefaultRender(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public Render getErrorRender(int errorCode, String errorView) {
 		// TODO Auto-generated method stub
 		return null;

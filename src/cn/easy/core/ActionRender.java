@@ -13,47 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.log;
+package cn.easy.core;
 
-public abstract class Logger {
+import cn.easy.render.Render;
 
-	public static void init() {
+public final class ActionRender extends Render{
+
+	@Override
+	public void render() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public static Logger getLogger(Class<?> clazz) {
+	public String getActionUrl() {
+		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public void error(String message) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void error(String message, Exception e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public static void setLoggerFactory(ILoggerFactory loggerFactory) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean isWarnEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public void warn(String string) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean isErrorEnabled() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }
