@@ -32,4 +32,9 @@ public final class Handlers {
 	public List<Handler> getHandlers() {
 		return handlers;
 	}
+
+	public Object getHandlerList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

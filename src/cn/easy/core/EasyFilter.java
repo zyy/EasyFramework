@@ -23,22 +23,55 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import cn.easy.config.Constants;
 import cn.easy.config.EasyConfig;
+import cn.easy.handler.Handler;
 import cn.easy.log.Logger;
 
 public class EasyFilter implements Filter {
+	
+	private Handler handler;
 	private EasyConfig easyConfig;
+	private String encoding;
+	private Constants constants;
+	private int contextPathLength;
 	private final static EasyFramework easyFramework = EasyFramework
 			.getInstance();
 	private static Logger log;
 
 	public void destroy() {
 		System.out.println("-->Call EasyFilter destroy method");
+		easyConfig.beforeEasyFrameworkStop();
+		easyFramework.stopPlugins();
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response,
+	public void doFilter(ServletRequest req, ServletResponse res,
 			FilterChain chain) throws IOException, ServletException {
 		System.out.println("-->EasyFilter get new request to filter");
+		HttpServletRequest request = (HttpServletRequest)req;
+		HttpServletResponse response = (HttpServletResponse)res;
+		request.setCharacterEncoding(encoding);
+		
+		String target = request.getRequestURI();
+		if (contextPathLength != 0)
+			target = target.substring(contextPathLength);
+		
+		boolean[] isHandled = {false};
+		try {
+			handler.handle(target, request, response, isHandled);
+		}
+		catch (Exception e) {
+			if (log.isErrorEnabled()) {
+				String qs = request.getQueryString();
+				log.error(qs == null ? target : target + "?" + qs, e);
+			}
+		}
+		
+		if (isHandled[0] == false)
+			chain.doFilter(request, response);
 	}
 
 	public void init(FilterConfig config) throws ServletException {
@@ -47,6 +80,14 @@ public class EasyFilter implements Filter {
 
 		if (easyFramework.init(easyConfig, config.getServletContext()) == false)
 			throw new RuntimeException("EasyFramework init error");
+		
+		handler = easyFramework.getHandler();
+		constants = Config.getConstants();
+		encoding = constants.getEncoding();
+		easyConfig.afterEasyFrameworkStart();
+		
+		String contextPath = config.getServletContext().getContextPath();
+		contextPathLength = (contextPath == null || "/".equals(contextPath) ? 0 : contextPath.length());
 	}
 
 	private void createEasyConfig(String classConfig) {

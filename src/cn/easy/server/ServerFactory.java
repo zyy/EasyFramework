@@ -43,4 +43,10 @@ public class ServerFactory {
 			throw new RuntimeException("WEB-INF derectory not found");
 		return temp[temp.length - 3];
 	}
+
+	public static IServer getServer(String webAppDir, int port, String context,
+			int scanIntervalSeconds) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -18,6 +18,7 @@ package cn.easy.core;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.easy.config.Constants;
 import cn.easy.handler.Handler;
 import cn.easy.log.Logger;
 import cn.easy.render.Render;
@@ -31,10 +32,9 @@ final class ActionHandler extends Handler {
 			.getInstance();
 	private static final Logger log = Logger.getLogger(ActionHandler.class);
 
-	public ActionHandler(boolean devMode, ActionMapping actionMapping) {
-		super();
-		this.devMode = devMode;
+	public ActionHandler(ActionMapping actionMapping, Constants constants) {
 		this.actionMapping = actionMapping;
+		this.devMode = constants.getDevMode();
 	}
 
 	@Override

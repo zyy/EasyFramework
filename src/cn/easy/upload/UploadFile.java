@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.i18n;
+package cn.easy.upload;
 
-public class I18n {
+public class UploadFile {
+
+	public Object getParameterName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -15,17 +15,28 @@
  */
 package cn.easy.core;
 
+import java.io.File;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import static cn.easy.core.Const.I18N_LOCALE;
+import cn.easy.i18n.I18N;
 import cn.easy.render.Render;
+import cn.easy.render.RenderFactory;
+import cn.easy.token.TokenManager;
+import cn.easy.upload.MultipartRequest;
+import cn.easy.upload.UploadFile;
+import cn.easy.util.StringUtil;
 
 public abstract class Controller {
 	private HttpServletRequest request;
@@ -599,11 +610,463 @@ public abstract class Controller {
 	public Long getParaToLong() {
 		return toLong(getPara(), null);
 	}
-
-	public Render getRender() {
-		// TODO Auto-generated method stub
+	
+	/**
+	 * Get model from http request.
+	 */
+	public <T> T getModel(Class<T> modelClass) {
+		return (T)ModelInjector.inject(modelClass, request, false);
+	}
+	
+	/**
+	 * Get model from http request.
+	 */
+	public <T> T getModel(Class<T> modelClass, String modelName) {
+		return (T)ModelInjector.inject(modelClass, modelName, request, false);
+	}
+	
+	// TODO public <T> List<T> getModels(Class<T> modelClass, String modelName) {}
+	
+	
+	/**
+	 * Get upload file from multipart request.
+	 */
+	public List<UploadFile> getFiles(String saveDirectory, Integer maxPostSize, String encoding) {
+		if (request instanceof MultipartRequest == false)
+			request = new MultipartRequest(request, saveDirectory, maxPostSize, encoding);
+		return ((MultipartRequest)request).getFiles();
+	}
+	
+	public UploadFile getFile(String parameterName, String saveDirectory, Integer maxPostSize, String encoding) {
+		getFiles(saveDirectory, maxPostSize, encoding);
+		return getFile(parameterName);
+	}
+	
+	public List<UploadFile> getFiles(String saveDirectory, int maxPostSize) {
+		if (request instanceof MultipartRequest == false)
+			request = new MultipartRequest(request, saveDirectory, maxPostSize);
+		return ((MultipartRequest)request).getFiles();
+	}
+	
+	public UploadFile getFile(String parameterName, String saveDirectory, int maxPostSize) {
+		getFiles(saveDirectory, maxPostSize);
+		return getFile(parameterName);
+	}
+	
+	public List<UploadFile> getFiles(String saveDirectory) {
+		if (request instanceof MultipartRequest == false)
+			request = new MultipartRequest(request, saveDirectory);
+		return ((MultipartRequest)request).getFiles();
+	}
+	
+	public UploadFile getFile(String parameterName, String saveDirectory) {
+		getFiles(saveDirectory);
+		return getFile(parameterName);
+	}
+	
+	public List<UploadFile> getFiles() {
+		if (request instanceof MultipartRequest == false)
+			request = new MultipartRequest(request);
+		return ((MultipartRequest)request).getFiles();
+	}
+	
+	public UploadFile getFile() {
+		List<UploadFile> uploadFiles = getFiles();
+		return uploadFiles.size() > 0 ? uploadFiles.get(0) : null;
+	}
+	
+	public UploadFile getFile(String parameterName) {
+		List<UploadFile> uploadFiles = getFiles();
+		for (UploadFile uploadFile : uploadFiles) {
+			if (uploadFile.getParameterName().equals(parameterName)) {
+				return uploadFile;
+			}
+		}
 		return null;
 	}
 	
+	// i18n features --------
+	/**
+	 * Write Local to cookie
+	 */
+	public Controller setLocaleToCookie(Locale locale) {
+		setCookie(I18N_LOCALE, locale.toString(), I18N.getI18nMaxAgeOfCookie());
+		return this;
+	}
+	
+	public Controller setLocaleToCookie(Locale locale, int maxAge) {
+		setCookie(I18N_LOCALE, locale.toString(), maxAge);
+		return this;
+	}
+	
+	public String getText(String key) {
+		return I18N.getText(key, getLocaleFromCookie());
+	}
+	
+	public String getText(String key, String defaultValue) {
+		return I18N.getText(key, defaultValue, getLocaleFromCookie());
+	}
+	
+	private Locale getLocaleFromCookie() {
+		Cookie cookie = getCookieObject(I18N_LOCALE);
+		if (cookie != null) {
+			return I18N.localeFromString(cookie.getValue());
+		}
+		else {
+			Locale defaultLocale = I18N.getDefaultLocale();
+			setLocaleToCookie(defaultLocale);
+			return I18N.localeFromString(defaultLocale.toString());
+		}
+	}
+	
+	/**
+	 * Keep all parameter's value except model value
+	 */
+	public Controller keepPara() {
+		Map<String, String[]> map = request.getParameterMap();
+		for (Entry<String, String[]> e: map.entrySet()) {
+			String[] values = e.getValue();
+			if (values.length == 1)
+				request.setAttribute(e.getKey(), values[0]);
+			else
+				request.setAttribute(e.getKey(), values);
+		}
+		return this;
+	}
+	
+	/**
+	 * Keep parameter's value names pointed, model value can not be kept
+	 */
+	public Controller keepPara(String... names) {
+		for (String name : names) {
+			String[] values = request.getParameterValues(name);
+			if (values != null) {
+				if (values.length == 1)
+					request.setAttribute(name, values[0]);
+				else
+					request.setAttribute(name, values);
+			}
+		}
+		return this;
+	}
+	
+	/**
+	 * Convert para to special type and keep it
+	 */
+	public Controller keepPara(Class type, String name) throws ParseException {
+		String[] values = request.getParameterValues(name);
+		if (values != null) {
+			if (values.length == 1)
+				request.setAttribute(name, TypeConverter.convert(type, values[0]));
+			else
+				request.setAttribute(name, values);
+		}
+		return this;
+	}
+	
+	public Controller keepPara(Class type, String... names) {
+		if (type == String.class)
+			return keepPara(names);
+		
+		if (names != null)
+			for (String name : names)
+				try {
+					keepPara(type, name);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+		return this;
+	}
+	
+	public Controller keepModel(Class modelClass, String modelName) {
+		Object model = ModelInjector.inject(modelClass, modelName, request, true);
+		request.setAttribute(modelName, model);
+		return this;
+	}
+	
+	public Controller keepModel(Class modelClass) {
+		String modelName = StringUtil.firstCharToLowerCase(modelClass.getSimpleName());
+		keepModel(modelClass, modelName);
+		return this;
+	}
+	
+	/**
+	 * Create a token.
+	 * @param tokenName the token name used in view
+	 * @param secondsOfTimeOut the seconds of time out, secondsOfTimeOut >= Const.MIN_SECONDS_OF_TOKEN_TIME_OUT
+	 */
+	public void createToken(String tokenName, int secondsOfTimeOut) {
+		TokenManager.createToken(this, tokenName, secondsOfTimeOut);
+	}
+	
+	/**
+	 * Create a token with default token name and with default seconds of time out.
+	 */
+	public void createToken() {
+		createToken(Const.DEFAULT_TOKEN_NAME, Const.DEFAULT_SECONDS_OF_TOKEN_TIME_OUT);
+	}
+	
+	/**
+	 * Create a token with default seconds of time out.
+	 * @param tokenName the token name used in view
+	 */
+	public void createToken(String tokenName) {
+		createToken(tokenName, Const.DEFAULT_SECONDS_OF_TOKEN_TIME_OUT);
+	}
+	
+	/**
+	 * Check token to prevent resubmit.
+	 * @param tokenName the token name used in view's form
+	 * @return true if token is correct
+	 */
+	public boolean validateToken(String tokenName) {
+		return TokenManager.validateToken(this, tokenName);
+	}
+	
+	/**
+	 * Check token to prevent resubmit  with default token key ---> "JFINAL_TOKEN_KEY"
+	 * @return true if token is correct
+	 */
+	public boolean validateToken() {
+		return validateToken(Const.DEFAULT_TOKEN_NAME);
+	}
+	
+	/**
+	 * Return true if the para value is blank otherwise return false
+	 */
+	public boolean isParaBlank(String paraName) {
+		String value = request.getParameter(paraName);
+		return value == null || value.trim().length() == 0;
+	}
+	
+	/**
+	 * Return true if the urlPara value is blank otherwise return false
+	 */
+	public boolean isParaBlank(int index) {
+		String value = getPara(index);
+		return value == null || value.trim().length() == 0;
+	}
+	
+	/**
+	 * Return true if the para exists otherwise return false
+	 */
+	public boolean isParaExists(String paraName) {
+		return request.getParameterMap().containsKey(paraName);
+	}
+	
+	/**
+	 * Return true if the urlPara exists otherwise return false
+	 */
+	public boolean isParaExists(int index) {
+		return getPara(index) != null;
+	}
+	
+	// ----------------
+	// render below ---
+	private static final RenderFactory renderFactory = RenderFactory.getInstance();
+	
+	/**
+	 * Hold Render object when invoke renderXxx(...)
+	 */
+	private Render render;
+	
+	public Render getRender() {
+		return render;
+	}
+	
+	/**
+	 * Render with any Render which extends Render
+	 */
+	public void render(Render render) {
+		this.render = render;
+	}
+	
+	/**
+	 * Render with view use default type Render configured in JFinalConfig
+	 */
+	public void render(String view) {
+		render = renderFactory.getRender(view);
+	}
+	
+	/**
+	 * Render with jsp view
+	 */
+	public void renderJsp(String view) {
+		render = renderFactory.getJspRender(view);
+	}
+	
+	/**
+	 * Render with freemarker view
+	 */
+	public void renderFreeMarker(String view) {
+		render = renderFactory.getFreeMarkerRender(view);
+	}
+	
+	/**
+	 * Render with velocity view
+	 */
+	public void renderVelocity(String view) {
+		render = renderFactory.getVelocityRender(view);
+	}
+	
+	/**
+	 * Render with json
+	 * <p>
+	 * Example:<br>
+	 * renderJson("message", "Save successful");<br>
+	 * renderJson("users", users);<br>
+	 */
+	public void renderJson(String key, Object value) {
+		render = renderFactory.getJsonRender(key, value);
+	}
+	
+	/**
+	 * Render with json
+	 */
+	public void renderJson() {
+		render = renderFactory.getJsonRender();
+	}
+	
+	/**
+	 * Render with attributes set by setAttr(...) before.
+	 * <p>
+	 * Example: renderJson(new String[]{"blogList", "user"});
+	 */
+	public void renderJson(String[] attrs) {
+		render = renderFactory.getJsonRender(attrs);
+	}
+	
+	/**
+	 * Render with json text.
+	 * <p>
+	 * Example: renderJson("{\"message\":\"Please input password!\"}");
+	 */
+	public void renderJson(String jsonText) {
+		render = renderFactory.getJsonRender(jsonText);
+	}
+	
+	/**
+	 * Render json with object.
+	 * <p>
+	 * Example: renderJson(new User().set("name", "JFinal").set("age", 18));
+	 */
+	public void renderJson(Object object) {
+		render = renderFactory.getJsonRender(object);
+	}
+	
+	/**
+	 * Render with text. The contentType is: "text/plain".
+	 */
+	public void renderText(String text) {
+		render = renderFactory.getTextRender(text);
+	}
+	
+	/**
+	 * Render with text and content type.
+	 * <p>
+	 * Example: renderText("<user id='5888'>James</user>", "application/xml");
+	 */
+	public void renderText(String text, String contentType) {
+		render = renderFactory.getTextRender(text, contentType);
+	}
+	
+	/**
+	 * Forward to an action
+	 */
+	public void forwardAction(String actionUrl) {
+		render = new ActionRender(actionUrl);
+	}
+	
+	/**
+	 * Render with file
+	 */
+	public void renderFile(String fileName) {
+		render = renderFactory.getFileRender(fileName);
+	}
+	
+	/**
+	 * Render with file
+	 */
+	public void renderFile(File file) {
+		render = renderFactory.getFileRender(file);
+	}
+	
+	/**
+	 * Redirect to url
+	 */
+	public void redirect(String url) {
+		render = renderFactory.getRedirectRender(url);
+	}
+	
+	/**
+	 * Redirect to url
+	 */
+	public void redirect(String url, boolean withQueryString) {
+		render = renderFactory.getRedirectRender(url, withQueryString);
+	}
+	
+	/**
+	 * Render with view and status use default type Render configured in JFinalConfig
+	 */
+	public void render(String view, int status) {
+		render = renderFactory.getRender(view);
+		response.setStatus(status);
+	}
+	
+	/**
+	 * Render with url and 301 status
+	 */
+	public void redirect301(String url) {
+		render = renderFactory.getRedirect301Render(url);
+	}
+	
+	/**
+	 * Render with url and 301 status
+	 */
+	public void redirect301(String url, boolean withQueryString) {
+		render = renderFactory.getRedirect301Render(url, withQueryString);
+	}
+	
+	/**
+	 * Render with view and errorCode status
+	 */
+	public void renderError(int errorCode, String view) {
+		throw new ActionException(errorCode, renderFactory.getErrorRender(errorCode, view));
+	}
+	
+	/**
+	 * Render with render and errorCode status
+	 */
+	public void renderError(int errorCode, Render render) {
+		throw new ActionException(errorCode, render);
+	}
+	
+	/**
+	 * Render with view and errorCode status configured in JFinalConfig
+	 */
+	public void renderError(int errorCode) {
+		throw new ActionException(errorCode, renderFactory.getErrorRender(errorCode));
+	}
+	
+	/**
+	 * Render nothing, no response to browser
+	 */
+	public void renderNull() {
+		render = renderFactory.getNullRender();
+	}
+	
+	/**
+	 * Render with javascript text. The contentType is: "text/javascript".
+	 */
+	public void renderJavascript(String javascriptText) {
+		render = renderFactory.getJavascriptRender(javascriptText);
+	}
+	
+	/**
+	 * Render with html text. The contentType is: "text/html".
+	 */
+	public void renderHtml(String htmlText) {
+		render = renderFactory.getHtmlRender(htmlText);
+	}
 
 }

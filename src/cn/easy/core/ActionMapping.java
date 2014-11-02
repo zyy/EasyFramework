@@ -53,7 +53,7 @@ public final class ActionMapping {
 		return excludedMethodNames;
 	}
 
-	public void buildMapping() {
+	public void buildActionMapping() {
 		mapping.clear();
 		Set<String> excludedMethodNames = buildExcludedMethodNames();
 		InterceptorBuilder interceptorBuilder = new InterceptorBuilder();
@@ -175,4 +175,5 @@ public final class ActionMapping {
 		Collections.sort(allActionKeys);
 		return allActionKeys;
 	}
+
 }

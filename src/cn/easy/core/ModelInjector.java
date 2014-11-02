@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.util;
+package cn.easy.core;
 
-public class StringUtil {
+import javax.servlet.http.HttpServletRequest;
 
-	public static boolean isEmpty(String str) {
-		return null == str || "".equals(str.trim()) ? true : false;
+public final class ModelInjector {
+
+	@SuppressWarnings("unchecked")
+	public static <T> T inject(Class<?> modelClass, HttpServletRequest request, boolean skipConvertError) {
+		return null;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static final <T> T inject(Class<?> modelClass, String modelName, HttpServletRequest request, boolean skipConvertError) {
+		
+		return null;
 	}
 
-	/**
-	 * 首字母变小写
-	 */
-	public static String firstCharToLowerCase(String str) {
-		Character firstChar = str.charAt(0);
-		String tail = str.substring(1);
-		str = Character.toLowerCase(firstChar) + tail;
-		return str;
-	}
 }

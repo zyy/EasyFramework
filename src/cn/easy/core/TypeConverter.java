@@ -13,21 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.util;
+package cn.easy.core;
 
-public class StringUtil {
+public class TypeConverter {
 
-	public static boolean isEmpty(String str) {
-		return null == str || "".equals(str.trim()) ? true : false;
+	public static Object convert(Class type, String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	/**
-	 * 首字母变小写
-	 */
-	public static String firstCharToLowerCase(String str) {
-		Character firstChar = str.charAt(0);
-		String tail = str.substring(1);
-		str = Character.toLowerCase(firstChar) + tail;
-		return str;
-	}
 }

@@ -15,6 +15,12 @@
  */
 package cn.easy.render;
 
+import java.io.File;
+
+import javax.servlet.ServletContext;
+
+import cn.easy.config.Constants;
+
 public class RenderFactory {
 	
 	private static RenderFactory renderFactory = new RenderFactory();
@@ -47,6 +53,111 @@ public class RenderFactory {
 	public Render getErrorRender(int errorCode, String errorView) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Render getRender(String view) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getJspRender(String view) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getFreeMarkerRender(String view) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getVelocityRender(String view) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getJsonRender(String key, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getJsonRender() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getJsonRender(String[] attrs) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getJsonRender(String jsonText) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getJsonRender(Object object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getTextRender(String text) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getTextRender(String text, String contentType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getFileRender(String fileName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getFileRender(File file) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getRedirectRender(String url) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getRedirectRender(String url, boolean withQueryString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getRedirect301Render(String url) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getRedirect301Render(String url, boolean withQueryString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getNullRender() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getJavascriptRender(String javascriptText) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Render getHtmlRender(String htmlText) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void init(Constants constants, ServletContext servletContext) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
