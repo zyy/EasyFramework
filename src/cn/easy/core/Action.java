@@ -27,8 +27,8 @@ public class Action {
 	private final String methodName;
 	private final Interceptor inter[];
 	private final String viewPath;
-	public Action(Class<? extends Controller> controllerClass,
-			String controllerKey, String actionKey, Method method,
+	public Action(String actionKey,
+			String controllerKey, Class<? extends Controller> controllerClass, Method method,
 			String methodName, Interceptor[] inter, String viewPath) {
 		super();
 		this.controllerClass = controllerClass;

@@ -15,9 +15,17 @@
  */
 package cn.easy.core;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import cn.easy.aop.Interceptor;
 import cn.easy.config.Interceptors;
 import cn.easy.config.Routes;
 
@@ -26,7 +34,7 @@ public final class ActionMapping {
 	private static final String SLASH = "/";
 	private Routes routes;
 	private Interceptors interceptors;
-	
+
 	private final Map<String, Action> mapping = new HashMap<String, Action>();
 
 	public ActionMapping(Routes routes, Interceptors interceptors) {
@@ -35,10 +43,136 @@ public final class ActionMapping {
 		this.interceptors = interceptors;
 	}
 
-	public Action getAction(String target, String[] urlPra) {
-		// TODO Auto-generated method stub
-		return null;
+	private Set<String> buildExcludedMethodNames() {
+		Set<String> excludedMethodNames = new HashSet<String>();
+		Method[] mehods = Controller.class.getMethods();
+		for (Method method : mehods) {
+			if (method.getParameterTypes().length == 0)
+				excludedMethodNames.add(method.getName());
+		}
+		return excludedMethodNames;
 	}
-	
-	
+
+	public void buildMapping() {
+		mapping.clear();
+		Set<String> excludedMethodNames = buildExcludedMethodNames();
+		InterceptorBuilder interceptorBuilder = new InterceptorBuilder();
+		Interceptor[] defaultInters = interceptors.getInterceptorList();
+		interceptorBuilder.addToInterceptorsMap(defaultInters);
+		for (Entry<String, Class<? extends Controller>> entry : routes
+				.getEntrySet()) {
+			Class<? extends Controller> controllerClass = entry.getValue();
+			Interceptor[] controllerInters = interceptorBuilder
+					.buildControllerInterceptors(controllerClass);
+			Method[] methods = controllerClass.getMethods();
+			for (Method method : methods) {
+				String methodName = method.getName();
+				if (!excludedMethodNames.contains(methodName)
+						&& method.getParameterTypes().length == 0) {
+					Interceptor[] methodInters = interceptorBuilder
+							.buildMethodInterceptors(method);
+					Interceptor[] actionInters = interceptorBuilder
+							.buildActionInterceptors(defaultInters,
+									controllerInters, controllerClass,
+									methodInters, method);
+					String controllerKey = entry.getKey();
+
+					ActionKey ak = method.getAnnotation(ActionKey.class);
+					if (ak != null) {
+						String actionKey = ak.value().trim();
+						if ("".equals(actionKey))
+							throw new IllegalArgumentException(
+									controllerClass.getName()
+											+ "."
+											+ methodName
+											+ "(): The argument of ActionKey can not be blank.");
+
+						if (!actionKey.startsWith(SLASH))
+							actionKey = SLASH + actionKey;
+
+						if (mapping.containsKey(actionKey)) {
+							warnning(actionKey, controllerClass, method);
+							continue;
+						}
+
+						Action action = new Action(controllerKey, actionKey,
+								controllerClass, method, methodName,
+								actionInters, routes.getViewPath(controllerKey));
+						mapping.put(actionKey, action);
+					} else if (methodName.equals("index")) {
+						String actionKey = controllerKey;
+
+						Action action = new Action(controllerKey, actionKey,
+								controllerClass, method, methodName,
+								actionInters, routes.getViewPath(controllerKey));
+						action = mapping.put(actionKey, action);
+
+						if (action != null) {
+							warnning(action.getActionKey(),
+									action.getControllerClass(),
+									action.getMethod());
+						}
+					} else {
+						String actionKey = controllerKey.equals(SLASH) ? SLASH
+								+ methodName : controllerKey + SLASH
+								+ methodName;
+
+						if (mapping.containsKey(actionKey)) {
+							warnning(actionKey, controllerClass, method);
+							continue;
+						}
+
+						Action action = new Action(controllerKey, actionKey,
+								controllerClass, method, methodName,
+								actionInters, routes.getViewPath(controllerKey));
+						mapping.put(actionKey, action);
+					}
+				}
+			}
+		}
+	}
+
+	private static final void warnning(String actionKey,
+			Class<? extends Controller> controllerClass, Method method) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(
+				"--------------------------------------------------------------------------------\nWarnning!!!\n")
+				.append("ActionKey already used: \"")
+				.append(actionKey)
+				.append("\" \n")
+				.append("Action can not be mapped: \"")
+				.append(controllerClass.getName())
+				.append(".")
+				.append(method.getName())
+				.append("()\" \n")
+				.append("--------------------------------------------------------------------------------");
+		System.out.println(sb.toString());
+	}
+
+	/**
+	 * Support four types of url 1: http://abc.com/controllerKey ---> 00 2:
+	 * http://abc.com/controllerKey/para ---> 01 3:
+	 * http://abc.com/controllerKey/method ---> 10 4:
+	 * http://abc.com/controllerKey/method/para ---> 11
+	 */
+	Action getAction(String url, String[] urlPara) {
+		Action action = mapping.get(url);
+		if (action != null) {
+			return action;
+		}
+
+		int i = url.lastIndexOf(SLASH);
+		if (i != -1) {
+			action = mapping.get(url.substring(0, i));
+			urlPara[0] = url.substring(i + 1);
+		}
+
+		return action;
+	}
+
+	List<String> getAllActionKeys() {
+		List<String> allActionKeys = new ArrayList<String>(mapping.keySet());
+		Collections.sort(allActionKeys);
+		return allActionKeys;
+	}
 }

@@ -17,6 +17,8 @@ package cn.easy.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import cn.easy.core.Controller;
 import cn.easy.util.StringUtil;
@@ -75,5 +77,13 @@ public abstract class Routes {
 			baseViewPath = baseViewPath.substring(0, baseViewPath.length() - 1);
 
 		Routes.baseViewPath = baseViewPath;
+	}
+
+	public String getViewPath(String controllerKey) {
+		return viewPathMap.get(controllerKey);
+	}
+
+	public Set<Entry<String, Class<? extends Controller>>> getEntrySet() {
+		return map.entrySet();
 	}
 }
