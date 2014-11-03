@@ -17,7 +17,7 @@ package cn.easy.plugin.activerecord;
 
 public class Table {
 
-	public Class getColumnType(String paraName) {
+	public Class<?> getColumnType(String paraName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
