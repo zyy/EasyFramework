@@ -175,6 +175,7 @@ public abstract class Controller {
 	 * @param name a String specifying the name of the attribute
 	 * @return an Object containing the value of the attribute, or null if the attribute does not exist
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T getAttr(String name) {
 		return (T)request.getAttribute(name);
 	}
@@ -367,6 +368,7 @@ public abstract class Controller {
 	 * Return a Object from session.
 	 * @param key a String specifying the key of the Object stored in session
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T getSessionAttr(String key) {
 		HttpSession session = request.getSession(false);
 		return session != null ? (T)session.getAttribute(key) : null;
@@ -614,6 +616,7 @@ public abstract class Controller {
 	/**
 	 * Get model from http request.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T getModel(Class<T> modelClass) {
 		return (T)ModelInjector.inject(modelClass, request, false);
 	}
@@ -621,6 +624,7 @@ public abstract class Controller {
 	/**
 	 * Get model from http request.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T getModel(Class<T> modelClass, String modelName) {
 		return (T)ModelInjector.inject(modelClass, modelName, request, false);
 	}
@@ -753,7 +757,7 @@ public abstract class Controller {
 	/**
 	 * Convert para to special type and keep it
 	 */
-	public Controller keepPara(Class type, String name) throws ParseException {
+	public Controller keepPara(Class<?> type, String name) throws ParseException {
 		String[] values = request.getParameterValues(name);
 		if (values != null) {
 			if (values.length == 1)
@@ -764,7 +768,7 @@ public abstract class Controller {
 		return this;
 	}
 	
-	public Controller keepPara(Class type, String... names) {
+	public Controller keepPara(Class<?> type, String... names) {
 		if (type == String.class)
 			return keepPara(names);
 		
@@ -778,13 +782,13 @@ public abstract class Controller {
 		return this;
 	}
 	
-	public Controller keepModel(Class modelClass, String modelName) {
+	public Controller keepModel(Class<?> modelClass, String modelName) {
 		Object model = ModelInjector.inject(modelClass, modelName, request, true);
 		request.setAttribute(modelName, model);
 		return this;
 	}
 	
-	public Controller keepModel(Class modelClass) {
+	public Controller keepModel(Class<?> modelClass) {
 		String modelName = StringUtil.firstCharToLowerCase(modelClass.getSimpleName());
 		keepModel(modelClass, modelName);
 		return this;

@@ -29,12 +29,7 @@ public final class Handlers {
 		return this;
 	}
 
-	public List<Handler> getHandlers() {
+	public List<Handler> getHandlerList() {
 		return handlers;
-	}
-
-	public Object getHandlerList() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
