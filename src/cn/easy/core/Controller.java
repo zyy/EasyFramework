@@ -886,7 +886,7 @@ public abstract class Controller {
 	}
 	
 	/**
-	 * Render with view use default type Render configured in JFinalConfig
+	 * Render with view use default type Render configured in EasyFrameworkConfig
 	 */
 	public void render(String view) {
 		render = renderFactory.getRender(view);
@@ -952,7 +952,7 @@ public abstract class Controller {
 	/**
 	 * Render json with object.
 	 * <p>
-	 * Example: renderJson(new User().set("name", "JFinal").set("age", 18));
+	 * Example: renderJson(new User().set("name", "EasyFramework").set("age", 18));
 	 */
 	public void renderJson(Object object) {
 		render = renderFactory.getJsonRender(object);
@@ -1010,7 +1010,7 @@ public abstract class Controller {
 	}
 	
 	/**
-	 * Render with view and status use default type Render configured in JFinalConfig
+	 * Render with view and status use default type Render configured in EasyFrameworkConfig
 	 */
 	public void render(String view, int status) {
 		render = renderFactory.getRender(view);
@@ -1046,7 +1046,7 @@ public abstract class Controller {
 	}
 	
 	/**
-	 * Render with view and errorCode status configured in JFinalConfig
+	 * Render with view and errorCode status configured in EasyFrameworkConfig
 	 */
 	public void renderError(int errorCode) {
 		throw new ActionException(errorCode, renderFactory.getErrorRender(errorCode));

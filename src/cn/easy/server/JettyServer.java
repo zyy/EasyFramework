@@ -53,8 +53,14 @@ public class JettyServer implements IServer {
 	}
 
 	public void stop() {
-		// TODO Auto-generated method stub
-
+		if (isRunning) {
+			try {
+				server.stop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			isRunning = false;
+		}
 	}
 
 	private void doStart() {

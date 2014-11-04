@@ -36,7 +36,7 @@ public final class ModelInjector {
 				request, skipConvertError);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static final <T> T inject(Class<?> modelClass, String modelName,
 			HttpServletRequest request, boolean skipConvertError) {
 		Object model = null;

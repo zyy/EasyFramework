@@ -49,7 +49,7 @@ public final class Constants {
 	private ITokenCache tokenCache;
 	
 	/**
-	 * Set ITokenCache implementation otherwise JFinal will use the HttpSesion to hold the token.
+	 * Set ITokenCache implementation otherwise EasyFramework will use the HttpSesion to hold the token.
 	 * @param tokenCache the token cache
 	 */
 	public void setTokenCache(ITokenCache tokenCache) {

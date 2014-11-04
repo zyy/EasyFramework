@@ -17,8 +17,8 @@ package cn.easy.config;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import cn.easy.core.Controller;
 import cn.easy.util.StringUtil;
@@ -40,7 +40,7 @@ public abstract class Routes {
 		return this;
 	}
 
-	public Routes addRoute(String controllerKey,
+	public Routes add(String controllerKey,
 			Class<? extends Controller> controllerClass, String viewPath) {
 		if (StringUtil.isEmpty(controllerKey))
 			throw new IllegalArgumentException(
@@ -64,7 +64,11 @@ public abstract class Routes {
 		viewPathMap.put(controllerKey, viewPath);
 		return this;
 	}
-
+	
+	public Routes add(String controllerkey, Class<? extends Controller> controllerClass) {
+		return add(controllerkey, controllerClass, controllerkey);
+	}
+	
 	public static void setBaseViewPath(String baseViewPath) {
 		if (StringUtil.isEmpty(baseViewPath))
 			throw new IllegalArgumentException(

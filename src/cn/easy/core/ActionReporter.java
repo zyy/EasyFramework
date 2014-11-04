@@ -51,7 +51,7 @@ public final class ActionReporter {
 	}
 
 	private static final void doReport(Controller controller, Action action) {
-		StringBuilder sb = new StringBuilder("\nJFinal action report -------- ")
+		StringBuilder sb = new StringBuilder("\nEasyFramework action report -------- ")
 				.append(sdf.format(new Date())).append(
 						" ------------------------------\n");
 		Class<? extends Controller> cc = action.getControllerClass();

@@ -15,6 +15,8 @@
  */
 package cn.easy.log;
 
-public class ILoggerFactory {
+public interface ILoggerFactory {
+	Logger getLogger(Class<?> clazz);
 
+	Logger getLogger(String name);
 }

@@ -63,13 +63,13 @@ public class Config {
 	}
 
 	public static void configEasyFramework(EasyConfig easyConfig) {
-		easyConfig.configConstants(constants);
+		easyConfig.configConstant(constants);
 		initLoggerFactory();
-		easyConfig.configHandlers(handlers);
-		easyConfig.configInterceptors(interceptors);
-		easyConfig.configPlugins(plugins);
+		easyConfig.configHandler(handlers);
+		easyConfig.configInterceptor(interceptors);
+		easyConfig.configPlugin(plugins);
 		startPlugins();
-		easyConfig.configRoutes(routes);
+		easyConfig.configRoute(routes);
 	}
 
 	private static void startPlugins() {

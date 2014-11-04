@@ -26,15 +26,15 @@ import cn.easy.util.PathUtil;
 import cn.easy.util.StringUtil;
 
 public abstract class EasyConfig {
-	public abstract void configConstants(Constants constants);
+	public abstract void configConstant(Constants constants);
 
-	public abstract void configHandlers(Handlers handlers);
+	public abstract void configHandler(Handlers handlers);
 
-	public abstract void configInterceptors(Interceptors interceptors);
+	public abstract void configInterceptor(Interceptors interceptors);
 
-	public abstract void configPlugins(Plugins plugins);
+	public abstract void configPlugin(Plugins plugins);
 
-	public abstract void configRoutes(Routes routes);
+	public abstract void configRoute(Routes routes);
 
 	public void afterEasyFrameworkStart() {
 	}

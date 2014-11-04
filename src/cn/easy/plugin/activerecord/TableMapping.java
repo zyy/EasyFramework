@@ -15,17 +15,35 @@
  */
 package cn.easy.plugin.activerecord;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TableMapping {
 
-	private static TableMapping tableMapping = new TableMapping();
-	
-	public static TableMapping getInstance() {
-		return tableMapping;
+	private final Map<Class<? extends Model<?>>, Table> modelToTableMap = new HashMap<Class<? extends Model<?>>, Table>();
+	private static TableMapping mapping = new TableMapping();
+
+	private TableMapping() {
 	}
 
-	public Table getTable(Class<? extends Model> class1) {
-		// TODO Auto-generated method stub
-		return null;
+	public static TableMapping getInstance() {
+		return mapping;
+	}
+
+	public void putTable(Table table) {
+		modelToTableMap.put(table.getModelClass(), table);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Table getTable(Class<? extends Model> modelClass) {
+		Table table = modelToTableMap.get(modelClass);
+		if (table == null)
+			throw new RuntimeException(
+					"The Table mapping of model: "
+							+ modelClass.getName()
+							+ " not exists. Please add mapping to ActiveRecordPlugin: activeRecordPlugin.addMapping(tableName, YourModel.class).");
+
+		return table;
 	}
 
 }

@@ -76,7 +76,7 @@ public class EasyFilter implements Filter {
 
 	public void init(FilterConfig config) throws ServletException {
 		System.out.println("-->Call EasyFilter init method");
-		createEasyConfig(config.getInitParameter("classConfig"));
+		createEasyConfig(config.getInitParameter("configClass"));
 
 		if (easyFramework.init(easyConfig, config.getServletContext()) == false)
 			throw new RuntimeException("EasyFramework init error");
