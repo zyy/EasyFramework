@@ -15,15 +15,13 @@
  */
 package cn.easy.plugin.activerecord;
 
-import java.io.Serializable;
+import java.util.List;
 
-public class Model<M extends Model> implements Serializable {
+public class TableBuilder {
 
-	private static final long serialVersionUID = -7603106831113480336L;
-
-	public void set(String paraName, Object value) {
+	public static boolean build(List<Table> tableList, Config config) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 }

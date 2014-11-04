@@ -13,17 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.plugin.activerecord;
+package cn.easy.plugin.activerecord.cache;
 
-import java.io.Serializable;
-
-public class Model<M extends Model> implements Serializable {
-
-	private static final long serialVersionUID = -7603106831113480336L;
-
-	public void set(String paraName, Object value) {
-		// TODO Auto-generated method stub
-		
-	}
+public class ICache {
 
 }

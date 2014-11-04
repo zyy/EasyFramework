@@ -15,15 +15,13 @@
  */
 package cn.easy.plugin.activerecord;
 
-import java.io.Serializable;
+import javax.sql.DataSource;
 
-public class Model<M extends Model> implements Serializable {
+public class IDataSourceProvider {
 
-	private static final long serialVersionUID = -7603106831113480336L;
-
-	public void set(String paraName, Object value) {
+	public DataSource getDataSource() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 }

@@ -17,6 +17,15 @@ package cn.easy.plugin.activerecord;
 
 public class Table {
 
+	public Table(String tableName, String primaryKey,
+			Class<? extends Model<?>> modelClass) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Table(String tableName, Class<? extends Model<?>> modelClass) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Class<?> getColumnType(String paraName) {
 		// TODO Auto-generated method stub
 		return null;

@@ -15,15 +15,17 @@
  */
 package cn.easy.plugin.activerecord;
 
-import java.io.Serializable;
+import javax.sql.DataSource;
 
-public class Model<M extends Model> implements Serializable {
+import cn.easy.plugin.activerecord.cache.ICache;
+import cn.easy.plugin.activerecord.dialect.Dialect;
 
-	private static final long serialVersionUID = -7603106831113480336L;
+public class Config {
 
-	public void set(String paraName, Object value) {
-		// TODO Auto-generated method stub
-		
+	public Config(String configName, DataSource dataSource, Dialect dialect,
+			Boolean showSql, Boolean devMode, Integer transactionLevel,
+			IContainerFactory containerFactory, ICache cache) {
+		// TODO Auto-generated constructor stub
 	}
 
 }

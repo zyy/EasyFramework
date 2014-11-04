@@ -15,13 +15,11 @@
  */
 package cn.easy.plugin.activerecord;
 
-import java.io.Serializable;
+public class DbUtil {
 
-public class Model<M extends Model> implements Serializable {
+	public static final String MAIN_CONFIG_NAME = "main";
 
-	private static final long serialVersionUID = -7603106831113480336L;
-
-	public void set(String paraName, Object value) {
+	public static void addConfig(Config config) {
 		// TODO Auto-generated method stub
 		
 	}

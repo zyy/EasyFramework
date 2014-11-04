@@ -15,13 +15,9 @@
  */
 package cn.easy.plugin.activerecord;
 
-import java.io.Serializable;
+public class Db {
 
-public class Model<M extends Model> implements Serializable {
-
-	private static final long serialVersionUID = -7603106831113480336L;
-
-	public void set(String paraName, Object value) {
+	public static void init() {
 		// TODO Auto-generated method stub
 		
 	}
