@@ -13,14 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.plugin.activerecord;
+package cn.easy.plugin.ehcache;
 
-import java.util.Map;
-import java.util.Set;
-
-@SuppressWarnings("rawtypes")
-public interface IContainerFactory {
-	Map getAttrsMap();
-	Map getColumnsMap();
-	Set getModifyFlagSet();
+public interface IDataLoader {
+	public Object load();
 }

@@ -13,14 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.easy.plugin.activerecord;
+package cn.easy.plugin.activerecord.cache;
 
-import java.util.Map;
-import java.util.Set;
+public class EhCache implements ICache {
 
-@SuppressWarnings("rawtypes")
-public interface IContainerFactory {
-	Map getAttrsMap();
-	Map getColumnsMap();
-	Set getModifyFlagSet();
+	@Override
+	public <T> T get(String cacheName, Object key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void put(String cacheName, Object key, Object value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void remove(String cacheName, Object key) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeAll(String cacheName) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

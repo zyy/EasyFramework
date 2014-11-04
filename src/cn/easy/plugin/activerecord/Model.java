@@ -17,6 +17,7 @@ package cn.easy.plugin.activerecord;
 
 import java.io.Serializable;
 
+@SuppressWarnings("rawtypes")
 public class Model<M extends Model> implements Serializable {
 
 	private static final long serialVersionUID = -7603106831113480336L;

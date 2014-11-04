@@ -15,12 +15,9 @@
  */
 package cn.easy.plugin.activerecord;
 
-import java.util.Map;
-import java.util.Set;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-@SuppressWarnings("rawtypes")
-public interface IContainerFactory {
-	Map getAttrsMap();
-	Map getColumnsMap();
-	Set getModifyFlagSet();
+public interface ICallback {
+	Object run(Connection conn) throws SQLException;
 }

@@ -17,11 +17,7 @@ package cn.easy.plugin.activerecord;
 
 import javax.sql.DataSource;
 
-public class IDataSourceProvider {
+public interface IDataSourceProvider {
 
-	public DataSource getDataSource() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	DataSource getDataSource();
 }

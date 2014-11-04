@@ -56,4 +56,9 @@ public abstract class Logger {
 		return false;
 	}
 
+	public void debug(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
